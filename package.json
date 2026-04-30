@@ -1,0 +1,19 @@
+{
+  "name": "codecommerce",
+  "version": "1.0.0",
+  "description": "CodeCommerce - Full-stack E-Commerce Platform",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"npm run backend-dev\" \"npm run frontend-dev\"",
+    "backend-dev": "cd backend && npm run dev",
+    "frontend-dev": "cd frontend && npm run dev",
+    "backend-start": "cd backend && npm start",
+    "frontend-build": "cd frontend && npm run build",
+    "install-all": "cd backend && npm install && cd ../frontend && npm install",
+    "docker-up": "docker-compose up -d",
+    "docker-down": "docker-compose down"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.1"
+  }
+}

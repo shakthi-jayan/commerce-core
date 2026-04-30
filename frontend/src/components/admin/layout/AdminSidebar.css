@@ -1,0 +1,65 @@
+.admin-sidebar {
+  width: 250px;
+  background-color: var(--bg-card);
+  border-right: 1px solid var(--border);
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  z-index: 1000;
+  transition: all 0.3s ease;
+}
+
+.admin-sidebar-header {
+  padding: 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 800;
+  font-size: 1.2rem;
+}
+
+.admin-nav {
+  padding: 20px 10px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.admin-nav .nav-link {
+  color: var(--text-secondary);
+  padding: 12px 15px;
+  border-radius: 8px;
+  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.admin-nav .nav-link:hover {
+  background-color: rgba(108, 99, 255, 0.05);
+  color: var(--primary);
+}
+
+.admin-nav .nav-link.active {
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  color: white;
+  box-shadow: 0 4px 10px rgba(108, 99, 255, 0.3);
+}
+
+.admin-nav .nav-icon {
+  font-size: 1.1rem;
+}
+
+@media (max-width: 992px) {
+  .admin-sidebar {
+    transform: translateX(-100%);
+  }
+  .admin-sidebar.open {
+    transform: translateX(0);
+  }
+}

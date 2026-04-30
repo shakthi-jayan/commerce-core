@@ -1,0 +1,52 @@
+.admin-header {
+  background-color: var(--bg-card);
+  border-bottom: 1px solid var(--border);
+  height: 70px;
+  position: sticky;
+  top: 0;
+  z-index: 999;
+}
+
+.header-icon-btn {
+  color: var(--text-secondary);
+  background: none;
+  border: none;
+  padding: 8px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.header-icon-btn:hover {
+  background-color: var(--bg-body);
+  color: var(--primary);
+}
+
+.notification-badge {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background-color: var(--danger);
+  color: white;
+  font-size: 0.6rem;
+  font-weight: 700;
+  border-radius: 10px;
+  padding: 2px 5px;
+  min-width: 16px;
+  text-align: center;
+}
+
+.user-profile-btn {
+  color: var(--text-primary);
+  text-decoration: none;
+}
+
+.user-profile-btn:hover {
+  color: var(--primary);
+}
+
+.sidebar-toggle {
+  color: var(--text-primary);
+}

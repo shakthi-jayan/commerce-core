@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:7
+    container_name: codecommerce-mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - codecommerce-net
+
+  redis:
+    image: redis:7-alpine
+    container_name: codecommerce-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - codecommerce-net
+
+  backend:
+    build: ./backend
+    container_name: codecommerce-backend
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./backend/.env
+    environment:
+      - MONGODB_URI=mongodb://mongodb:27017/codecommerce
+      - REDIS_HOST=redis
+    depends_on:
+      - mongodb
+      - redis
+    networks:
+      - codecommerce-net
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    container_name: codecommerce-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - codecommerce-net
+    restart: unless-stopped
+
+volumes:
+  mongodb_data:
+
+networks:
+  codecommerce-net:
+    driver: bridge
