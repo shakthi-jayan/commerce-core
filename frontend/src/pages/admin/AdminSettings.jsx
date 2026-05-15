@@ -72,7 +72,7 @@ const AdminSettings = () => {
     }
     setSaving(true);
     try {
-      
+      // Assuming a dedicated endpoint for password update, or use user profile endpoint if it handles password
       await api.put('/users/password', {
         currentPassword: passwords.currentPassword,
         newPassword: passwords.newPassword,

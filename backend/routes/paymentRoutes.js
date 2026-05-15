@@ -6,6 +6,6 @@ const router = Router();
 router.get('/get-key', getRazorpayKey);
 router.post('/create-order', protect, createRazorpayOrder);
 router.post('/verify-payment', protect, verifyPayment);
-router.post('/webhook', razorpayWebhook); 
+router.post('/webhook', razorpayWebhook); // No auth — Razorpay calls this
 
 export default router;

@@ -35,7 +35,7 @@ export const getProductReviews = async (req, res, next) => {
       Review.countDocuments(filter),
     ]);
 
-    
+    // Calculate rating breakdown
     const stats = await Review.aggregate([
       { $match: { product: req.params.productId, status: 'approved' } },
       { $group: { _id: '$rating', count: { $sum: 1 } } }
@@ -114,11 +114,11 @@ export const addReview = async (req, res, next) => {
   try {
     const { product, order, rating, title, comment } = req.body;
 
-    
+    // Validate product exists
     const productExists = await Product.findById(product);
     if (!productExists) return res.status(404).json({ success: false, message: 'Product not found' });
 
-    
+    // Validate order exists and belongs to user
     let orderExists;
     if (order) {
       orderExists = await Order.findOne({ _id: order, user: req.user._id, status: 'delivered' });
@@ -130,7 +130,7 @@ export const addReview = async (req, res, next) => {
       return res.status(400).json({ success: false, message: 'You can only review products you have purchased and received' });
     }
 
-    
+    // Verify product is in the order
     const productInOrder = orderExists.orderItems.find(item => item.product.toString() === product.toString());
     if (!productInOrder) {
       return res.status(400).json({ success: false, message: 'This product was not in the specified order' });
@@ -138,13 +138,13 @@ export const addReview = async (req, res, next) => {
 
     const orderIdToUse = orderExists._id;
 
-    
+    // Check if review already exists for this order+product+user
     const existingReview = await Review.findOne({ product, user: req.user._id, order: orderIdToUse });
     if (existingReview) {
       return res.status(400).json({ success: false, message: 'You have already reviewed this product for this order' });
     }
 
-    
+    // Handle images if uploaded
     let images = [];
     if (req.files && req.files.length > 0) {
       for (const file of req.files) {
@@ -184,14 +184,14 @@ export const updateReview = async (req, res, next) => {
       return res.status(403).json({ success: false, message: 'Not authorized to update this review' });
     }
 
-    
+    // Allow updating rating, title, comment
     if (req.body.rating) review.rating = Number(req.body.rating);
     if (req.body.title !== undefined) review.title = req.body.title;
     if (req.body.comment) review.comment = req.body.comment;
 
-    
+    // Handle new images
     if (req.files && req.files.length > 0) {
-      
+      // If user uploads new images, we append or replace? Let's just append up to 5
       let newImages = [];
       for (const file of req.files) {
         if (review.images.length + newImages.length >= 5) break;
@@ -201,11 +201,11 @@ export const updateReview = async (req, res, next) => {
       review.images = [...review.images, ...newImages];
     }
     
-    
+    // If user explicitly removes images
     if (req.body.removeImages) {
       const imagesToRemove = Array.isArray(req.body.removeImages) ? req.body.removeImages : [req.body.removeImages];
       review.images = review.images.filter(img => !imagesToRemove.includes(img));
-      
+      // Optionally delete from cloudinary here
     }
 
     await review.save();

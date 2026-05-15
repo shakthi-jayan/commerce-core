@@ -19,7 +19,7 @@ const AdminProducts = () => {
   const [search, setSearch] = useState('');
   const [selectedRows, setSelectedRows] = useState([]);
   const [toggleCleared, setToggleCleared] = useState(false);
-  const [deleting, setDeleting] = useState(null); 
+  const [deleting, setDeleting] = useState(null); // holds product id while deleting
   const navigate = useNavigate();
   const { theme } = useTheme();
 
@@ -44,16 +44,16 @@ const AdminProducts = () => {
 
   useEffect(() => {
     fetchProducts(page, perPage, search);
-  }, [page, perPage]); 
+  }, [page, perPage]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  
+  // Debounced search
   useEffect(() => {
     const timer = setTimeout(() => {
       if (page === 1) fetchProducts(1, perPage, search);
       else setPage(1);
     }, 500);
     return () => clearTimeout(timer);
-  }, [search]); 
+  }, [search]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to delete this product?')) return;

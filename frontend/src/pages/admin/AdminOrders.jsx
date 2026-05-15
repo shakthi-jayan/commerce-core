@@ -44,7 +44,7 @@ const AdminOrders = () => {
 
   useEffect(() => {
     fetchOrders(page, perPage, statusFilter);
-  }, [page, perPage, statusFilter]); 
+  }, [page, perPage, statusFilter]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleStatusChange = async (id, status) => {
     setUpdatingOrderId(id);

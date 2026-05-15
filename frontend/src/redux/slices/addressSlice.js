@@ -58,23 +58,23 @@ const addressSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      
+      // Fetch
       .addCase(fetchAddresses.pending, (s) => { s.loading = true; s.error = null; })
       .addCase(fetchAddresses.fulfilled, (s, a) => { s.loading = false; s.addresses = a.payload; })
       .addCase(fetchAddresses.rejected, (s, a) => { s.loading = false; s.error = a.payload; })
-      
+      // Add
       .addCase(addAddress.pending, (s) => { s.loading = true; s.error = null; })
       .addCase(addAddress.fulfilled, (s, a) => { s.loading = false; s.addresses = a.payload; })
       .addCase(addAddress.rejected, (s, a) => { s.loading = false; s.error = a.payload; })
-      
+      // Update
       .addCase(updateAddress.pending, (s) => { s.loading = true; s.error = null; })
       .addCase(updateAddress.fulfilled, (s, a) => { s.loading = false; s.addresses = a.payload; })
       .addCase(updateAddress.rejected, (s, a) => { s.loading = false; s.error = a.payload; })
-      
+      // Delete
       .addCase(deleteAddress.pending, (s) => { s.loading = true; s.error = null; })
       .addCase(deleteAddress.fulfilled, (s, a) => { s.loading = false; s.addresses = a.payload; })
       .addCase(deleteAddress.rejected, (s, a) => { s.loading = false; s.error = a.payload; })
-      
+      // Set Default
       .addCase(setDefaultAddress.pending, (s) => { s.loading = true; s.error = null; })
       .addCase(setDefaultAddress.fulfilled, (s, a) => { s.loading = false; s.addresses = a.payload; })
       .addCase(setDefaultAddress.rejected, (s, a) => { s.loading = false; s.error = a.payload; });

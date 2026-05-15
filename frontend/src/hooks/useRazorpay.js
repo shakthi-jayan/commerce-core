@@ -27,7 +27,7 @@ const useRazorpay = () => {
         theme: { color: '#6C63FF' },
       });
 
-      
+      // Verify payment
       await razorpayService.verifyPayment({
         razorpay_order_id: response.razorpay_order_id,
         razorpay_payment_id: response.razorpay_payment_id,

@@ -12,7 +12,7 @@ export const createRazorpayOrder = async (req, res, next) => {
 
     const razorpay = getRazorpayInstance();
     const options = {
-      amount: Math.round(amount * 100), 
+      amount: Math.round(amount * 100), // Razorpay expects paise
       currency: 'INR',
       receipt: orderId || `receipt_${Date.now()}`,
       notes: { userId: req.user._id.toString() },
@@ -43,7 +43,7 @@ export const verifyPayment = async (req, res, next) => {
       return res.status(400).json({ success: false, message: 'Payment verification failed' });
     }
 
-    
+    // Update order
     if (orderId) {
       const order = await Order.findById(orderId);
       if (order) {
@@ -103,7 +103,7 @@ export const razorpayWebhook = async (req, res, next) => {
         order.status = 'cancelled';
         order.paymentResult.status = 'failed';
         await order.save();
-        
+        // Restore stock
         for (const item of order.orderItems) {
           await Product.findByIdAndUpdate(item.product, { $inc: { stock: item.quantity } });
         }

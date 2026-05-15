@@ -48,21 +48,21 @@ export const getProduct = async (req, res, next) => {
  */
 const parseFormDataBody = (body) => {
   const parsed = { ...body };
-  
+  // Boolean fields
   ['isActive', 'isFeatured'].forEach((key) => {
     if (key in parsed) {
       parsed[key] = parsed[key] === 'true' || parsed[key] === true;
     }
   });
-  
+  // Numeric fields
   ['price', 'compareAtPrice', 'stock', 'weight'].forEach((key) => {
     if (key in parsed && parsed[key] !== '' && parsed[key] !== undefined) {
       parsed[key] = Number(parsed[key]);
     } else if (key in parsed && parsed[key] === '') {
-      delete parsed[key]; 
+      delete parsed[key]; // remove empty optional numerics
     }
   });
-  
+  // Tags — parse JSON array string if needed
   if (typeof parsed.tags === 'string') {
     try { parsed.tags = JSON.parse(parsed.tags); } catch { parsed.tags = []; }
   }

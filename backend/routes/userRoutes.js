@@ -8,7 +8,7 @@ import { updateProfileValidator } from '../validators/authValidator.js';
 const router = Router();
 router.use(protect);
 
-
+// User routes
 router.put('/profile', uploadSingle, updateProfileValidator, validate, updateProfile);
 router.route('/addresses').get(getAddresses).post(addAddress);
 router.route('/addresses/:addressId').put(updateAddress).delete(deleteAddress);
@@ -16,7 +16,7 @@ router.put('/addresses/:addressId/default', setDefaultAddress);
 router.put('/wishlist/:productId', toggleWishlist);
 router.get('/wishlist', getWishlist);
 
-
+// Admin routes
 router.get('/', authorize('admin'), getAllUsers);
 router.route('/:id').get(authorize('admin'), getUserById).delete(authorize('admin'), deleteUser);
 router.put('/:id/role', authorize('admin'), updateUserRole);

@@ -51,7 +51,7 @@ const AdminReports = () => {
     );
   }
 
-  
+  // Format monthly revenue for chart
   const monthlyData = stats?.monthlyRevenue?.map(m => ({
     name: m._id,
     revenue: m.revenue,

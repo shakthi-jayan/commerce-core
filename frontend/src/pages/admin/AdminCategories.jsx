@@ -36,15 +36,15 @@ const AdminCategories = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  
+  // Modal state
   const [showModal, setShowModal] = useState(false);
-  const [editing, setEditing] = useState(null); 
+  const [editing, setEditing] = useState(null); // null = creating, category obj = editing
   const [formData, setFormData] = useState(EMPTY_FORM);
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [saving, setSaving] = useState(false);
 
-  
+  // Delete state
   const [deletingId, setDeletingId] = useState(null);
 
   const fetchCategories = useCallback(async () => {
@@ -63,9 +63,9 @@ const AdminCategories = () => {
 
   useEffect(() => {
     fetchCategories();
-  }, []); 
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  
+  // ── Modal handlers ─────────────────────────────────────────
   const openCreateModal = () => {
     setEditing(null);
     setFormData(EMPTY_FORM);
@@ -180,7 +180,7 @@ const AdminCategories = () => {
     setDeletingId(null);
   };
 
-  
+  // ── Render ─────────────────────────────────────────────────
   return (
     <div>
       {/* Header */}
@@ -392,7 +392,7 @@ const AdminCategories = () => {
                   >
                     <option value="">None (top-level)</option>
                     {categories
-                      .filter((c) => c._id !== editing?._id) 
+                      .filter((c) => c._id !== editing?._id) // can't be own parent
                       .map((c) => (
                         <option key={c._id} value={c._id}>
                           {c.name}

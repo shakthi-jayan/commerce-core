@@ -17,13 +17,13 @@ class APIFeatures {
     const excludedFields = ['page', 'sort', 'limit', 'fields', 'search', 'keyword'];
     excludedFields.forEach((el) => delete queryObj[el]);
 
-    
+    // Advanced filtering with MongoDB operators
     let queryStr = JSON.stringify(queryObj);
     queryStr = queryStr.replace(/\b(gte|gt|lte|lt|in)\b/g, (match) => `$${match}`);
 
     const parsed = JSON.parse(queryStr);
 
-    
+    // Handle 'in' arrays from comma-separated strings
     Object.keys(parsed).forEach((key) => {
       if (parsed[key]?.$in && typeof parsed[key].$in === 'string') {
         parsed[key].$in = parsed[key].$in.split(',');

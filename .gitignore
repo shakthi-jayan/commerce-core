@@ -1,35 +1,7 @@
-# Dependencies
-node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-package-lock.json
-
-# Environment files
+node_modules
+dist
 .env
-.env.*
-!.env.example
-.env.local
-
-# Build outputs
-dist/
-build/
-.next/
-
-# IDE files
-.vscode/
-.idea/
-*.swp
-.DS_Store
-Thumbs.db
-
-# Logs
-logs/
+logs
 *.log
-
-# Testing
-coverage/
-
-# Temp files
-tmp/
-temp/
+.DS_Store
+coverage

@@ -28,7 +28,7 @@ export const errorHandler = (err, req, res, _next) => {
   error.message = err.message;
   error.stack = err.stack;
 
-  
+  // Log error
   logger.error(`${err.message}`, {
     method: req.method,
     url: req.originalUrl,
@@ -36,24 +36,24 @@ export const errorHandler = (err, req, res, _next) => {
     statusCode: err.statusCode || 500,
   });
 
-  
+  // Mongoose bad ObjectId
   if (err.name === 'CastError') {
     error = new AppError(`Resource not found with id: ${err.value}`, 404);
   }
 
-  
+  // Mongoose duplicate key
   if (err.code === 11000) {
     const field = Object.keys(err.keyValue)[0];
     error = new AppError(`Duplicate value for '${field}'. This ${field} already exists.`, 400);
   }
 
-  
+  // Mongoose validation error
   if (err.name === 'ValidationError') {
     const messages = Object.values(err.errors).map((val) => val.message);
     error = new AppError(messages.join('. '), 400);
   }
 
-  
+  // JWT errors
   if (err.name === 'JsonWebTokenError') {
     error = new AppError('Invalid token. Please log in again.', 401);
   }
@@ -61,7 +61,7 @@ export const errorHandler = (err, req, res, _next) => {
     error = new AppError('Token expired. Please log in again.', 401);
   }
 
-  
+  // Multer file size error
   if (err.code === 'LIMIT_FILE_SIZE') {
     error = new AppError('File too large. Maximum size is 5MB.', 400);
   }

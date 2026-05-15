@@ -9,7 +9,7 @@ const userService = {
   setDefaultAddress: (id) => api.put(`/users/addresses/${id}/default`),
   toggleWishlist: (productId) => api.put(`/users/wishlist/${productId}`),
   getWishlist: () => api.get('/users/wishlist'),
-  
+  // Admin
   getAllUsers: (params) => api.get('/users', { params }),
   getUser: (id) => api.get(`/users/${id}`),
   deleteUser: (id) => api.delete(`/users/${id}`),

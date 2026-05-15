@@ -33,7 +33,7 @@ const CheckoutPage = () => {
   const [paymentMethod, setPaymentMethod] = useState('razorpay');
   const [useSameAsBilling, setUseSameAsBilling] = useState(true);
 
-  
+  // Address modal
   const [showAddressModal, setShowAddressModal] = useState(false);
   const [editingAddress, setEditingAddress] = useState(null);
 
@@ -45,7 +45,7 @@ const CheckoutPage = () => {
     dispatch(fetchAddresses());
   }, [dispatch]);
 
-  
+  // Pre-select default address
   useEffect(() => {
     if (addresses.length > 0 && !selectedAddressId) {
       const defaultAddr = addresses.find(a => a.isDefault);
@@ -64,7 +64,7 @@ const CheckoutPage = () => {
     try {
       const result = await dispatch(addAddress(formData)).unwrap();
       setShowAddressModal(false);
-      
+      // Select the newly added address (last one in the array)
       if (result.length > 0) {
         setSelectedAddressId(result[result.length - 1]._id);
       }

@@ -10,13 +10,13 @@ import api from './api';
  * the correct `multipart/form-data` boundary.
  */
 const adminService = {
-  
+  // ── Auth ────────────────────────────────────────────────────
   login: (credentials) => api.post('/admin/login', credentials),
 
-  
+  // ── Dashboard ───────────────────────────────────────────────
   getDashboardStats: () => api.get('/admin/dashboard/stats'),
 
-  
+  // ── Products ────────────────────────────────────────────────
   getProducts: (params) => api.get('/admin/products', { params }),
 
   getProduct: (id) => api.get(`/admin/products/${id}`),
@@ -39,7 +39,7 @@ const adminService = {
   bulkUpdateStock: (updates) =>
     api.post('/admin/products/bulk-stock', { updates }),
 
-  
+  // ── Orders ──────────────────────────────────────────────────
   getOrders: (params) => api.get('/admin/orders', { params }),
 
   updateOrderStatus: (id, data) =>
@@ -47,7 +47,7 @@ const adminService = {
 
   cancelOrder: (id) => api.put(`/admin/orders/${id}/cancel`),
 
-  
+  // ── Users ───────────────────────────────────────────────────
   getUsers: (params) => api.get('/admin/users', { params }),
 
   updateUserRole: (id, role) =>
@@ -58,7 +58,7 @@ const adminService = {
 
   deleteUser: (id) => api.delete(`/admin/users/${id}`),
 
-  
+  // ── Categories (admin CRUD) ─────────────────────────────────
   getCategories: () => api.get('/categories/all'),
 
   createCategory: (formData) => api.post('/categories', formData),
@@ -67,12 +67,12 @@ const adminService = {
 
   deleteCategory: (id) => api.delete(`/categories/${id}`),
 
-  
+  // ── Reviews ──────────────────────────────────────────────────
   getReviews: (params) => api.get('/admin/reviews', { params }),
 
   deleteReview: (id) => api.delete(`/admin/reviews/${id}`),
 
-  
+  // ── Exports ─────────────────────────────────────────────────
   exportProducts: () =>
     api.get('/admin/export/products', { responseType: 'blob' }),
 
@@ -82,7 +82,7 @@ const adminService = {
   exportUsers: () =>
     api.get('/admin/export/users', { responseType: 'blob' }),
 
-  
+  // ── Invoice ─────────────────────────────────────────────────
   generateInvoice: (id) =>
     api.get(`/admin/orders/${id}/invoice`, { responseType: 'blob' }),
 };

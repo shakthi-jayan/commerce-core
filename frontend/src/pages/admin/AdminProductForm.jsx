@@ -37,18 +37,18 @@ const AdminProductForm = () => {
 
   useEffect(() => {
     loadFormData();
-    
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   const loadFormData = async () => {
     setLoading(true);
     setError(null);
     try {
-      
+      // Load categories
       const { data: catData } = await adminService.getCategories();
       setCategories(catData.categories || catData.data || []);
 
-      
+      // Load product when editing
       if (isEdit) {
         const { data } = await adminService.getProduct(id);
         const p = data.product;
@@ -82,7 +82,7 @@ const AdminProductForm = () => {
     onDrop,
     accept: { 'image/*': ['.jpeg', '.jpg', '.png', '.gif', '.webp', '.svg'] },
     maxFiles: 5,
-    maxSize: 5 * 1024 * 1024, 
+    maxSize: 5 * 1024 * 1024, // 5MB per file
   });
 
   const removeNewImage = (index) => {
@@ -121,7 +121,7 @@ const AdminProductForm = () => {
     if (!formData.stock && formData.stock !== 0) { toast.error('Stock is required'); return false; }
     if (!formData.category) { toast.error('Category is required'); return false; }
     if (!isEdit && !formData.sku.trim() && newImages.length === 0 && existingImages.length === 0) {
-      
+      // Allow empty SKU (auto-generate), but warn about no images
     }
     return true;
   };
@@ -134,7 +134,7 @@ const AdminProductForm = () => {
     try {
       const payload = new FormData();
 
-      
+      // Append text fields — handle special cases
       payload.append('name', formData.name.trim());
       payload.append('description', formData.description);
       payload.append('price', formData.price);
@@ -143,14 +143,14 @@ const AdminProductForm = () => {
       payload.append('isActive', formData.isActive);
       payload.append('isFeatured', formData.isFeatured);
 
-      
+      // SKU: auto-generate if empty
       if (formData.sku.trim()) {
         payload.append('sku', formData.sku.trim());
       } else {
         payload.append('sku', 'SKU-' + Math.random().toString(36).substring(2, 8).toUpperCase());
       }
 
-      
+      // Optional fields — only append when non-empty
       if (formData.compareAtPrice !== '' && formData.compareAtPrice !== null) {
         payload.append('compareAtPrice', formData.compareAtPrice);
       }
@@ -158,7 +158,7 @@ const AdminProductForm = () => {
         payload.append('brand', formData.brand.trim());
       }
 
-      
+      // Append new image files
       newImages.forEach((file) => {
         payload.append('images', file);
       });

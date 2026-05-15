@@ -48,7 +48,7 @@ export const createProductValidator = [
   body('tags')
     .optional()
     .customSanitizer((value) => {
-      
+      // Handle JSON string from FormData
       if (typeof value === 'string') {
         try { return JSON.parse(value); } catch { return []; }
       }

@@ -42,10 +42,10 @@ const cartSchema = new mongoose.Schema(
   }
 );
 
-
+// Index
 cartSchema.index({ user: 1 }, { unique: true });
 
-
+// Recalculate total before save
 cartSchema.pre('save', function (next) {
   this.totalPrice = this.items.reduce((total, item) => {
     return total + item.price * item.quantity;

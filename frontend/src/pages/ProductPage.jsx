@@ -25,7 +25,7 @@ const ProductPage = () => {
   const [qty, setQty] = useState(1);
   const [selectedImage, setSelectedImage] = useState(0);
   
-  
+  // Reviews state
   const [reviews, setReviews] = useState([]);
   const [reviewForm, setReviewForm] = useState({ rating: 5, comment: '' });
   const [submittingReview, setSubmittingReview] = useState(false);

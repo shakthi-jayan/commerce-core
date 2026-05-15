@@ -39,7 +39,7 @@ const AdminUsers = () => {
 
   useEffect(() => {
     fetchUsers(page, perPage);
-  }, [page, perPage]); 
+  }, [page, perPage]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleRoleChange = async (id, role) => {
     setUpdatingUserId(id);

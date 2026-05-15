@@ -102,7 +102,7 @@ export const generateInvoice = async (req, res, next) => {
 
     doc.pipe(res);
 
-    
+    // Header
     doc
       .fillColor('#444444')
       .fontSize(20)
@@ -114,7 +114,7 @@ export const generateInvoice = async (req, res, next) => {
 
     doc.moveTo(50, 110).lineTo(550, 110).stroke();
 
-    
+    // Customer Info
     doc
       .fontSize(12)
       .text('Bill To:', 50, 130)
@@ -124,7 +124,7 @@ export const generateInvoice = async (req, res, next) => {
       .text(order.shippingAddress?.country || 'N/A', 50, 175)
       .moveDown();
 
-    
+    // Items
     let invoiceTableTop = 220;
     
     doc.font('Helvetica-Bold');
@@ -147,7 +147,7 @@ export const generateInvoice = async (req, res, next) => {
 
     doc.moveTo(50, position + 10).lineTo(550, position + 10).stroke();
 
-    
+    // Totals
     const subtotalPosition = position + 30;
     doc.font('Helvetica-Bold');
     doc.text('Subtotal:', 380, subtotalPosition);

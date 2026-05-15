@@ -21,7 +21,7 @@ const connectDB = async () => {
       logger.info('MongoDB reconnected');
     });
 
-    
+    // Graceful shutdown
     process.on('SIGINT', async () => {
       await mongoose.connection.close();
       logger.info('MongoDB connection closed through app termination');

@@ -15,7 +15,7 @@ export const register = async (req, res, next) => {
   try {
     const { name, email, password } = req.body;
 
-    
+    // Check if user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({
@@ -24,12 +24,12 @@ export const register = async (req, res, next) => {
       });
     }
 
-    
+    // Create user
     const user = await User.create({ name, email, password });
 
     logger.info(`New user registered: ${user.email}`);
 
-    
+    // Send welcome email (non-blocking)
     sendEmail({
       to: user.email,
       subject: 'Welcome to CodeCommerce!',
@@ -58,7 +58,7 @@ export const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
-    
+    // Find user with password
     const user = await User.findOne({ email }).select('+password');
 
     if (!user) {
@@ -68,7 +68,7 @@ export const login = async (req, res, next) => {
       });
     }
 
-    
+    // Check password
     const isMatch = await user.comparePassword(password);
     if (!isMatch) {
       return res.status(401).json({
@@ -92,7 +92,7 @@ export const login = async (req, res, next) => {
  */
 export const logout = async (req, res, next) => {
   try {
-    
+    // Clear cookies
     res.cookie('accessToken', 'none', {
       expires: new Date(Date.now() + 5 * 1000),
       httpOnly: true,
@@ -102,7 +102,7 @@ export const logout = async (req, res, next) => {
       httpOnly: true,
     });
 
-    
+    // Clear refresh token in DB
     if (req.user) {
       await User.findByIdAndUpdate(req.user._id, { refreshToken: '' });
       await cacheDelete(`user:${req.user._id}`);
@@ -150,11 +150,11 @@ export const forgotPassword = async (req, res, next) => {
       });
     }
 
-    
+    // Generate reset token
     const resetToken = user.generateResetToken();
     await user.save({ validateBeforeSave: false });
 
-    
+    // Create reset URL
     const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
 
     await sendEmail({
@@ -176,7 +176,7 @@ export const forgotPassword = async (req, res, next) => {
       message: 'Password reset email sent',
     });
   } catch (error) {
-    
+    // Clean up token on failure
     if (error.message === 'Email could not be sent') {
       const user = await User.findOne({ email: req.body.email });
       if (user) {
@@ -196,7 +196,7 @@ export const forgotPassword = async (req, res, next) => {
  */
 export const resetPassword = async (req, res, next) => {
   try {
-    
+    // Hash the token from URL
     const resetPasswordToken = crypto
       .createHash('sha256')
       .update(req.params.token)
@@ -214,7 +214,7 @@ export const resetPassword = async (req, res, next) => {
       });
     }
 
-    
+    // Set new password
     user.password = req.body.password;
     user.resetPasswordToken = undefined;
     user.resetPasswordExpire = undefined;
@@ -244,7 +244,7 @@ export const refreshToken = async (req, res, next) => {
       });
     }
 
-    
+    // Verify refresh token
     const decoded = jwt.verify(token, process.env.JWT_REFRESH_SECRET);
     const user = await User.findById(decoded.id);
 
@@ -255,7 +255,7 @@ export const refreshToken = async (req, res, next) => {
       });
     }
 
-    
+    // Generate new access token
     const accessToken = generateAccessToken(user._id);
 
     const cookieOptions = {

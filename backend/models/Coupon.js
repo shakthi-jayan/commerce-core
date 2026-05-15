@@ -74,11 +74,11 @@ const couponSchema = new mongoose.Schema(
   }
 );
 
-
+// Indexes
 couponSchema.index({ code: 1 }, { unique: true });
 couponSchema.index({ isActive: 1, validFrom: 1, validUntil: 1 });
 
-
+// Virtual to check if coupon is valid
 couponSchema.virtual('isValid').get(function () {
   const now = new Date();
   return (

@@ -14,17 +14,17 @@ const SettingsPage = () => {
   const dispatch = useDispatch();
   const { addresses, loading: addressLoading } = useSelector((s) => s.address);
 
-  
+  // Profile state
   const [name, setName] = useState(user?.name || '');
   const [email, setEmail] = useState(user?.email || '');
   const [phone, setPhone] = useState(user?.phone || '');
   const [profileLoading, setProfileLoading] = useState(false);
 
-  
+  // Address modal state
   const [showAddressModal, setShowAddressModal] = useState(false);
   const [editingAddress, setEditingAddress] = useState(null);
 
-  
+  // Delete confirmation state
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deletingAddressId, setDeletingAddressId] = useState(null);
   const [deleteLoading, setDeleteLoading] = useState(false);

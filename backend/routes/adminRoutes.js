@@ -40,27 +40,27 @@ import {
 
 const router = Router();
 
-
+// Public admin login
 router.post('/login', adminLogin);
 
-
+// All routes below require admin auth
 router.use(protect, authorize('admin'));
 
-
+// Dashboard
 router.get('/dashboard/stats', getDashboardStats);
 
-
+// Products — bulk routes MUST come before /:id params to avoid conflict
 router.get('/products', adminGetProducts);
 router.post('/products', uploadMultiple, createProductValidator, validate, createProduct);
 router.post('/products/bulk-delete', bulkDeleteProducts);
 router.post('/products/bulk-stock', bulkUpdateStock);
-router.get('/products/:id', getProduct);                       
+router.get('/products/:id', getProduct);                       // single product for edit form
 router.put('/products/:id', uploadMultiple, updateProductValidator, validate, updateProduct);
 router.delete('/products/:id', deleteProduct);
 router.put('/products/:id/stock', updateProductStock);
-router.delete('/products/:id/images/:imageId', deleteProductImage); 
+router.delete('/products/:id/images/:imageId', deleteProductImage); // delete a single image
 
-
+// Orders
 router.get('/orders', adminGetOrders);
 router.post('/orders/bulk-status', bulkUpdateOrderStatus);
 router.get('/orders/:id', getAdminOrderById);
@@ -69,17 +69,17 @@ router.post('/orders/:id/notes', addOrderNote);
 router.put('/orders/:id/cancel', cancelOrder);
 router.get('/orders/:id/invoice', generateInvoice);
 
-
+// Users
 router.get('/users', adminGetUsers);
 router.put('/users/:id/role', adminUpdateUserRole);
 router.put('/users/:id/status', adminUpdateUserStatus);
 router.delete('/users/:id', adminDeleteUser);
 
-
+// Reviews
 router.get('/reviews', adminGetReviews);
 router.delete('/reviews/:id', adminDeleteReview);
 
-
+// Exports
 router.get('/export/products', exportProducts);
 router.get('/export/orders', exportOrders);
 router.get('/export/users', exportUsers);

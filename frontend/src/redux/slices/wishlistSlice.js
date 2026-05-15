@@ -22,8 +22,8 @@ export const toggleWishlistItem = createAsyncThunk('wishlist/toggle', async (pro
 const wishlistSlice = createSlice({
   name: 'wishlist',
   initialState: {
-    items: [],       
-    products: [],    
+    items: [],       // Array of product IDs (from toggle endpoint)
+    products: [],    // Populated product objects (from fetch endpoint)
     loading: false,
     error: null,
   },

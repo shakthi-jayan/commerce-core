@@ -18,17 +18,17 @@ export const adminLogin = async (req, res, next) => {
       return res.status(400).json({ success: false, message: 'Email and password are required' });
     }
 
-    
+    // Verify against .env credentials
     if (email !== process.env.ADMIN_EMAIL || password !== process.env.ADMIN_PASSWORD) {
       logger.warn(`Failed admin login attempt: ${email}`);
       return res.status(401).json({ success: false, message: 'Invalid admin credentials' });
     }
 
-    
+    // Find or create the admin user in DB
     let adminUser = await User.findOne({ email, role: 'admin' });
 
     if (!adminUser) {
-      
+      // Auto-seed admin user on first login
       adminUser = await User.create({
         name: 'Admin',
         email: process.env.ADMIN_EMAIL,
@@ -97,13 +97,13 @@ export const getDashboardStats = async (req, res, next) => {
       Order.countDocuments({ status: 'pending' }),
       Product.countDocuments({ stock: { $lte: 5 }, isActive: true }),
       Order.find().populate('user', 'name email').sort('-createdAt').limit(5).lean(),
-      
+      // Monthly revenue for the last 6 months
       Order.aggregate([
         { $match: { $or: [{ isPaid: true }, { status: 'delivered' }], createdAt: { $gte: new Date(Date.now() - 180 * 24 * 60 * 60 * 1000) } } },
         { $group: { _id: { $dateToString: { format: '%Y-%m', date: '$createdAt' } }, revenue: { $sum: '$totalPrice' }, orders: { $sum: 1 } } },
         { $sort: { _id: 1 } },
       ]),
-      
+      // Category-wise sales
       Order.aggregate([
         { $match: { $or: [{ isPaid: true }, { status: 'delivered' }] } },
         { $unwind: '$orderItems' },
@@ -111,7 +111,7 @@ export const getDashboardStats = async (req, res, next) => {
         { $sort: { revenue: -1 } },
         { $limit: 5 },
       ]),
-      
+      // Order status distribution
       Order.aggregate([
         { $group: { _id: '$status', count: { $sum: 1 } } },
       ]),
@@ -268,7 +268,7 @@ export const adminUpdateOrderStatus = async (req, res, next) => {
       order.deliveredAt = Date.now();
     }
     if (status === 'cancelled') {
-      
+      // Restore stock
       for (const item of order.orderItems) {
         await Product.findByIdAndUpdate(item.product, { $inc: { stock: item.quantity } });
       }
@@ -414,7 +414,7 @@ export const bulkDeleteProducts = async (req, res, next) => {
  */
 export const bulkUpdateStock = async (req, res, next) => {
   try {
-    const { updates } = req.body; 
+    const { updates } = req.body; // [{ id: '...', stock: 10 }, ...]
     if (!Array.isArray(updates) || updates.length === 0) {
       return res.status(400).json({ success: false, message: 'No stock updates provided' });
     }
@@ -446,7 +446,7 @@ export const cancelOrder = async (req, res, next) => {
 
     order.status = 'cancelled';
     
-    
+    // Restore stock
     for (const item of order.orderItems) {
       await Product.findByIdAndUpdate(item.product, { $inc: { stock: item.quantity } });
     }

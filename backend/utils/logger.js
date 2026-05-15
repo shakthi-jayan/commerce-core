@@ -21,7 +21,7 @@ const logger = winston.createLogger({
     new winston.transports.File({
       filename: 'logs/error.log',
       level: 'error',
-      maxsize: 5242880, 
+      maxsize: 5242880, // 5MB
       maxFiles: 5,
     }),
     new winston.transports.File({
@@ -32,7 +32,7 @@ const logger = winston.createLogger({
   ],
 });
 
-
+// In production, don't log to console
 if (process.env.NODE_ENV === 'production') {
   logger.transports[0].silent = true;
 }

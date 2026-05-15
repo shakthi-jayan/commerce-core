@@ -47,19 +47,19 @@ const categorySchema = new mongoose.Schema(
   }
 );
 
-
+// Indexes
 categorySchema.index({ slug: 1 }, { unique: true });
 categorySchema.index({ parentCategory: 1 });
 categorySchema.index({ isActive: 1 });
 
-
+// Virtual for subcategories
 categorySchema.virtual('subcategories', {
   ref: 'Category',
   localField: '_id',
   foreignField: 'parentCategory',
 });
 
-
+// Generate slug before validation
 categorySchema.pre('validate', function (next) {
   if (this.isModified('name') && !this.slug) {
     this.slug = this.name

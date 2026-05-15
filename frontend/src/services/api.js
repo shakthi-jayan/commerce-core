@@ -10,13 +10,13 @@ const api = axios.create({
 
 api.interceptors.request.use(
   (config) => {
-    
+    // Attach auth token
     const token = localStorage.getItem('accessToken');
     if (token) config.headers.Authorization = `Bearer ${token}`;
 
-    
-    
-    
+    // Set Content-Type only for non-FormData payloads.
+    // When sending FormData, axios must auto-detect multipart/form-data
+    // with the correct boundary — setting it manually breaks uploads.
     if (!(config.data instanceof FormData)) {
       config.headers['Content-Type'] = config.headers['Content-Type'] || 'application/json';
     }

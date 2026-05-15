@@ -9,11 +9,11 @@ export const protect = async (req, res, next) => {
   try {
     let token;
 
-    
+    // Check Authorization header
     if (req.headers.authorization?.startsWith('Bearer')) {
       token = req.headers.authorization.split(' ')[1];
     }
-    
+    // Check cookies
     else if (req.cookies?.accessToken) {
       token = req.cookies.accessToken;
     }
@@ -25,10 +25,10 @@ export const protect = async (req, res, next) => {
       });
     }
 
-    
+    // Verify token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    
+    // Get user from token
     const user = await User.findById(decoded.id).select('-password -refreshToken');
 
     if (!user) {
@@ -103,7 +103,7 @@ export const optionalAuth = async (req, res, next) => {
       req.user = await User.findById(decoded.id).select('-password -refreshToken');
     }
   } catch {
-    
+    // Silently continue — user just won't be set
   }
 
   next();

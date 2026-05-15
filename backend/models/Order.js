@@ -117,13 +117,13 @@ const orderSchema = new mongoose.Schema(
   }
 );
 
-
+// Indexes
 orderSchema.index({ user: 1, createdAt: -1 });
 orderSchema.index({ status: 1 });
 orderSchema.index({ orderNumber: 1 }, { unique: true });
 orderSchema.index({ 'paymentResult.razorpayOrderId': 1 });
 
-
+// Generate order number before saving
 orderSchema.pre('save', async function (next) {
   if (!this.orderNumber) {
     const count = await this.constructor.countDocuments();

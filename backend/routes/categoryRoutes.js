@@ -5,13 +5,13 @@ import { uploadSingle } from '../middlewares/uploadMiddleware.js';
 
 const router = Router();
 
-
+// Public — only active categories
 router.get('/', getCategories);
 
-
+// Admin — all categories including inactive
 router.get('/all', protect, authorize('admin'), getAllCategories);
 
-
+// Admin CRUD
 router.post('/', protect, authorize('admin'), uploadSingle, createCategory);
 router.route('/:id')
   .put(protect, authorize('admin'), uploadSingle, updateCategory)

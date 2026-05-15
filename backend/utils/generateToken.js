@@ -34,7 +34,7 @@ export const sendTokenResponse = (user, statusCode, res) => {
     sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
   };
 
-  
+  // Remove password from output
   const userObj = user.toObject();
   delete userObj.password;
   delete userObj.refreshToken;

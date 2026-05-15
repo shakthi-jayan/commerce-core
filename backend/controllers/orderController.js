@@ -14,7 +14,7 @@ export const createOrder = async (req, res, next) => {
       return res.status(400).json({ success: false, message: 'No order items' });
     }
 
-    
+    // Verify products and calculate prices
     let itemsPrice = 0;
     const verifiedItems = [];
 
@@ -34,7 +34,7 @@ export const createOrder = async (req, res, next) => {
       itemsPrice += product.price * item.quantity;
     }
 
-    const taxPrice = Math.round(itemsPrice * 0.18 * 100) / 100; 
+    const taxPrice = Math.round(itemsPrice * 0.18 * 100) / 100; // 18% GST
     const shippingPrice = itemsPrice > 500 ? 0 : 50;
     const totalPrice = Math.round((itemsPrice + taxPrice + shippingPrice) * 100) / 100;
 
@@ -52,17 +52,17 @@ export const createOrder = async (req, res, next) => {
       status: paymentMethod === 'cod' ? 'confirmed' : 'pending',
     });
 
-    
+    // Update stock
     for (const item of verifiedItems) {
       await Product.findByIdAndUpdate(item.product, { $inc: { stock: -item.quantity } });
     }
 
-    
+    // Clear user's cart
     await Cart.findOneAndUpdate({ user: req.user._id }, { items: [], totalPrice: 0 });
     await cacheDelete(`cart:${req.user._id}`);
     await cacheDeletePattern('products:*');
 
-    
+    // Send order confirmation email
     sendEmail({
       to: req.user.email,
       subject: `Order Confirmed — ${order.orderNumber}`,

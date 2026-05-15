@@ -98,7 +98,7 @@ const productSchema = new mongoose.Schema(
   }
 );
 
-
+// Indexes for query performance
 productSchema.index({ name: 'text', description: 'text', tags: 'text' });
 productSchema.index({ category: 1 });
 productSchema.index({ price: 1 });
@@ -107,14 +107,14 @@ productSchema.index({ createdAt: -1 });
 productSchema.index({ isActive: 1, isFeatured: 1 });
 productSchema.index({ sku: 1 }, { unique: true });
 
-
+// Virtual for reviews
 productSchema.virtual('reviews', {
   ref: 'Review',
   localField: '_id',
   foreignField: 'product',
 });
 
-
+// Virtual for discount percentage
 productSchema.virtual('discountPercentage').get(function () {
   if (this.compareAtPrice && this.compareAtPrice > this.price) {
     return Math.round(((this.compareAtPrice - this.price) / this.compareAtPrice) * 100);
@@ -122,7 +122,7 @@ productSchema.virtual('discountPercentage').get(function () {
   return 0;
 });
 
-
+// Virtual for in-stock status
 productSchema.virtual('inStock').get(function () {
   return this.stock > 0;
 });

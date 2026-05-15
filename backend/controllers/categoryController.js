@@ -9,15 +9,15 @@ import logger from '../utils/logger.js';
  */
 const parseCategoryBody = (body) => {
   const parsed = { ...body };
-  
+  // Boolean fields
   if ('isActive' in parsed) {
     parsed.isActive = parsed.isActive === 'true' || parsed.isActive === true;
   }
-  
+  // Numeric fields
   if ('sortOrder' in parsed && parsed.sortOrder !== '') {
     parsed.sortOrder = Number(parsed.sortOrder);
   }
-  
+  // Clear empty parentCategory (FormData sends empty string)
   if (parsed.parentCategory === '' || parsed.parentCategory === 'null') {
     parsed.parentCategory = null;
   }
@@ -92,7 +92,7 @@ export const deleteCategory = async (req, res, next) => {
     const category = await Category.findById(req.params.id);
     if (!category) return res.status(404).json({ success: false, message: 'Category not found' });
 
-    
+    // Check if category has products referencing it
     const Product = (await import('../models/Product.js')).default;
     const productCount = await Product.countDocuments({ category: req.params.id });
     if (productCount > 0) {
