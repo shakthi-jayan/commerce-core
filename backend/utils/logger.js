@@ -17,24 +17,8 @@ const logger = winston.createLogger({
   transports: [
     new winston.transports.Console({
       format: combine(colorize(), logFormat),
-    }),
-    new winston.transports.File({
-      filename: 'logs/error.log',
-      level: 'error',
-      maxsize: 5242880, // 5MB
-      maxFiles: 5,
-    }),
-    new winston.transports.File({
-      filename: 'logs/combined.log',
-      maxsize: 5242880,
-      maxFiles: 5,
-    }),
+    })
   ],
 });
-
-// In production, don't log to console
-if (process.env.NODE_ENV === 'production') {
-  logger.transports[0].silent = true;
-}
 
 export default logger;
