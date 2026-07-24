@@ -340,12 +340,6 @@ This project helped me strengthen my skills in:
 
 ---
 
-## Resume Description
-
-**CodeCommerce** is a production-ready MERN-style e-commerce application featuring customer authentication, shopping cart, Razorpay payments, image uploads, and a comprehensive admin dashboard for managing products, orders, users, reviews, and analytics.
-
----
-
 ## Author
 
 **Shakthi Jayan**
